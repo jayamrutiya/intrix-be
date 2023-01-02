@@ -37,6 +37,7 @@ app.use(`${ENV.API_ROOT}/docs`, routers.swaggerRouter);
 
 // Register routes
 app.use(`${ENV.API_ROOT}/test`, routers.testRouter);
+app.use(`${ENV.API_ROOT}/use-case`, routers.useCaseRouter);
 
 // Use error handling middleware
 app.use(errorHandler);
