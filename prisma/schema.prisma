@@ -9,3 +9,43 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
+
+enum YESorNO {
+  Yes
+  No
+}
+
+enum BusinessImpact {
+  Cost
+  Revenue
+  Both
+}
+
+model UseCase {
+  id                         Int            @id @default(autoincrement())
+  createdAt                  DateTime       @default(now())
+  updatedAt                  DateTime       @updatedAt
+  businessUnit               String?
+  businessOwner              String?
+  vertical                   String?
+  description                String?        @db.Text
+  assumptions                String?
+  constraints                String?
+  dependencies               String?
+  crossDomainYesOrNo         YESorNO
+  crossDomainValue           String?
+  parentTheme                String?
+  useCaseTheme               String?
+  businessImpact             BusinessImpact
+  businessImpactCostValue    String?
+  businessImpactRevenueValue String?
+  impact                     String?
+  time                       String?
+  systemsInvolved            String?
+  source                     String?
+  externalData               String?
+  criticalDataElement        String?
+  investmentCategory         String?
+  competitiveThrust          String?
+  dataTrust                  String?
+}
