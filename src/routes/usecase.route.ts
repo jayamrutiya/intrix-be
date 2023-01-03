@@ -13,4 +13,10 @@ const useCaseController = new UseCaseController(loggerService, useCaseService);
 
 router.post("/", (req, res) => useCaseController.createUseCase(req, res));
 
+router.put("/", (req, res) => useCaseController.updateUseCase(req, res));
+
+router.get("/:id", (req, res) => useCaseController.getUseCase(req, res));
+
+router.get("/", (req, res) => useCaseController.getAllUseCase(req, res));
+
 export default router;

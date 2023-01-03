@@ -1,9 +1,10 @@
 import { inject, injectable } from "inversify";
 import { TYPES } from "../config/types";
+import { NotFound } from "../errors/NotFound";
 import { ILoggerService } from "../interfaces/ILoggerService";
 import { IUseCaseRepository } from "../interfaces/IUseCaseRepository";
 import { IUseCaseService } from "../interfaces/IUseCaseService";
-import { CreateUseCase, UseCase } from "../types/UseCase";
+import { CreateUseCase, UpdateUseCase, UseCase } from "../types/UseCase";
 
 @injectable()
 export class UseCaseService implements IUseCaseService {
@@ -21,5 +22,22 @@ export class UseCaseService implements IUseCaseService {
 
   async createUseCase(input: CreateUseCase): Promise<UseCase> {
     return this._useCaseRepository.createUseCase(input);
+  }
+
+  async updateUseCase(input: UpdateUseCase): Promise<UseCase> {
+    const getUseCase = await this._useCaseRepository.getUseCase(input.id);
+
+    if (!getUseCase) {
+      throw new NotFound("Use Case not found");
+    }
+    return this._useCaseRepository.updateUseCase(input);
+  }
+
+  async getUseCase(id: number): Promise<UseCase | null> {
+    return this._useCaseRepository.getUseCase(id);
+  }
+
+  async getAllUseCase(): Promise<UseCase[]> {
+    return this._useCaseRepository.getAllUseCase();
   }
 }

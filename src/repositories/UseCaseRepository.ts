@@ -4,7 +4,7 @@ import { InternalServerError } from "../errors/InternalServerError";
 import { IDatabaseService } from "../interfaces/IDatabaseService";
 import { ILoggerService } from "../interfaces/ILoggerService";
 import { IUseCaseRepository } from "../interfaces/IUseCaseRepository";
-import { CreateUseCase, UseCase } from "../types/UseCase";
+import { CreateUseCase, UpdateUseCase, UseCase } from "../types/UseCase";
 
 @injectable()
 export class UseCaseRepository implements IUseCaseRepository {
@@ -28,6 +28,63 @@ export class UseCaseRepository implements IUseCaseRepository {
       return await client.useCase.create({
         data: input,
       });
+    } catch (error) {
+      this._loggerService.getLogger().error(`Error ${error}`);
+      throw new InternalServerError(
+        "An error occurred while interacting with the database."
+      );
+    } finally {
+      // finally block
+    }
+  }
+
+  async updateUseCase(input: UpdateUseCase): Promise<UseCase> {
+    try {
+      // Get the client
+      const client = this._databaseService.Client();
+
+      return await client.useCase.update({
+        where: {
+          id: input.id,
+        },
+        data: input,
+      });
+    } catch (error) {
+      this._loggerService.getLogger().error(`Error ${error}`);
+      throw new InternalServerError(
+        "An error occurred while interacting with the database."
+      );
+    } finally {
+      // finally block
+    }
+  }
+
+  async getUseCase(id: number): Promise<UseCase | null> {
+    try {
+      // Get the client
+      const client = this._databaseService.Client();
+
+      return await client.useCase.findFirst({
+        where: {
+          id,
+        },
+      });
+    } catch (error) {
+      this._loggerService.getLogger().error(`Error ${error}`);
+      throw new InternalServerError(
+        "An error occurred while interacting with the database."
+      );
+    } finally {
+      // finally block
+    }
+  }
+
+  async getAllUseCase(): Promise<UseCase[]> {
+    try {
+      // Get the client
+      const client = this._databaseService.Client();
+
+      return await client.useCase.findMany({});
     } catch (error) {
       this._loggerService.getLogger().error(`Error ${error}`);
       throw new InternalServerError(
