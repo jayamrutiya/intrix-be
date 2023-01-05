@@ -26,7 +26,12 @@ export class UseCaseRepository implements IUseCaseRepository {
       const client = this._databaseService.Client();
 
       return await client.useCase.create({
-        data: input,
+        data: {
+          ...input,
+          useCaseName: "Use Case Test 1",
+          approver: "User 1",
+          status: "Pending",
+        },
       });
     } catch (error) {
       this._loggerService.getLogger().error(`Error ${error}`);

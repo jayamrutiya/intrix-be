@@ -23,6 +23,7 @@ export declare type CreateUseCase = {
     investmentCategory: string | null;
     competitiveThrust: string | null;
     dataTrust: string | null;
+    priority: string | null;
 };
 export declare type UseCase = {
     id: number;
@@ -51,6 +52,10 @@ export declare type UseCase = {
     investmentCategory: string | null;
     competitiveThrust: string | null;
     dataTrust: string | null;
+    useCaseName: string | null;
+    approver: string | null;
+    status: string | null;
+    priority: string | null;
 };
 export declare type UpdateUseCase = {
     id: number;
@@ -77,4 +82,5 @@ export declare type UpdateUseCase = {
     investmentCategory: string | null;
     competitiveThrust: string | null;
     dataTrust: string | null;
+    priority: string | null;
 };

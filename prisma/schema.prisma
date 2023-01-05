@@ -25,6 +25,7 @@ model UseCase {
   id                         Int            @id @default(autoincrement())
   createdAt                  DateTime       @default(now())
   updatedAt                  DateTime       @updatedAt
+  useCaseName                String?
   businessUnit               String?
   businessOwner              String?
   vertical                   String?
@@ -48,4 +49,7 @@ model UseCase {
   investmentCategory         String?
   competitiveThrust          String?
   dataTrust                  String?
+  approver                   String?
+  status                     String?
+  priority                   String?
 }

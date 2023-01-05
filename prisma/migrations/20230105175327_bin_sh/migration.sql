@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE `UseCase` ADD COLUMN `approver` VARCHAR(191) NULL,
+    ADD COLUMN `status` VARCHAR(191) NULL,
+    ADD COLUMN `useCaseName` VARCHAR(191) NULL;

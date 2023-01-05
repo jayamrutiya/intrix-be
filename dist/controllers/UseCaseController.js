@@ -46,6 +46,7 @@ class UseCaseController extends BaseController_1.default {
                 investmentCategory: req.body.investmentCategory,
                 competitiveThrust: req.body.competitiveThrust,
                 dataTrust: req.body.dataTrust,
+                priority: req.body.priority,
             };
             const createUseCase = await this._useCaseService.createUseCase(cretaUseCase);
             // Return the response
@@ -92,6 +93,7 @@ class UseCaseController extends BaseController_1.default {
                 investmentCategory: req.body.investmentCategory,
                 competitiveThrust: req.body.competitiveThrust,
                 dataTrust: req.body.dataTrust,
+                priority: req.body.priority,
             };
             const updateUseCase = await this._useCaseService.updateUseCase(updateUseCaseInput);
             // Return the response
