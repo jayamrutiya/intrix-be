@@ -18,7 +18,8 @@ const app = (0, express_1.default)();
 // Use helmet JS
 app.use((0, helmet_1.default)());
 // Enable CORS
-app.use((0, cors_1.default)({ origin: "https://intrix-datasolution-poc.netlify.app" }));
+app.use((0, cors_1.default)({ origin: "*" }));
+app.options("*", (0, cors_1.default)({ origin: "*" }));
 // Use body parser to read JSON payloads
 app.use(express_1.default.json({ limit: "500mb" }));
 app.use(body_parser_1.default.json());
