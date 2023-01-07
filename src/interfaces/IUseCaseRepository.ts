@@ -8,4 +8,6 @@ export interface IUseCaseRepository {
   getUseCase(id: number): Promise<UseCase | null>;
 
   getAllUseCase(): Promise<UseCase[]>;
+
+  deleteUseCase(): Promise<any>;
 }

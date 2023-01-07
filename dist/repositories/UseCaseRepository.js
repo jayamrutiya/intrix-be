@@ -94,6 +94,20 @@ let UseCaseRepository = class UseCaseRepository {
             // finally block
         }
     }
+    async deleteUseCase() {
+        try {
+            // Get the client
+            const client = this._databaseService.Client();
+            return await client.useCase.deleteMany({});
+        }
+        catch (error) {
+            this._loggerService.getLogger().error(`Error ${error}`);
+            throw new InternalServerError_1.InternalServerError("An error occurred while interacting with the database.");
+        }
+        finally {
+            // finally block
+        }
+    }
 };
 UseCaseRepository = __decorate([
     (0, inversify_1.injectable)(),

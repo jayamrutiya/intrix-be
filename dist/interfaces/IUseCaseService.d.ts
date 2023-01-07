@@ -4,4 +4,5 @@ export interface IUseCaseService {
     updateUseCase(input: UpdateUseCase): Promise<UseCase>;
     getUseCase(id: number): Promise<UseCase | null>;
     getAllUseCase(): Promise<UseCase[]>;
+    deleteUseCase(): Promise<any>;
 }

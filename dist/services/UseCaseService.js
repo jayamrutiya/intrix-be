@@ -38,6 +38,9 @@ let UseCaseService = class UseCaseService {
     async getAllUseCase() {
         return this._useCaseRepository.getAllUseCase();
     }
+    async deleteUseCase() {
+        return this._useCaseRepository.deleteUseCase();
+    }
 };
 UseCaseService = __decorate([
     (0, inversify_1.injectable)(),

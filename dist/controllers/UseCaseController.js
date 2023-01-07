@@ -134,6 +134,20 @@ class UseCaseController extends BaseController_1.default {
             return this.sendErrorResponse(req, res, error);
         }
     }
+    async deleteUseCase(req, res) {
+        try {
+            // validate input
+            this.validateRequest(req);
+            const deleteUseCAse = await this._useCaseService.deleteUseCase();
+            // Return the response
+            return this.sendJSONResponse(res, "Use Cases deleted.", {
+                size: 1,
+            }, deleteUseCAse);
+        }
+        catch (error) {
+            return this.sendErrorResponse(req, res, error);
+        }
+    }
 }
 exports.default = UseCaseController;
 //# sourceMappingURL=UseCaseController.js.map

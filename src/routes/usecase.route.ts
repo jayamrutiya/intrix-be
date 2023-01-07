@@ -19,4 +19,6 @@ router.get("/:id", (req, res) => useCaseController.getUseCase(req, res));
 
 router.get("/", (req, res) => useCaseController.getAllUseCase(req, res));
 
+router.delete("/", (req, res) => useCaseController.deleteUseCase(req, res));
+
 export default router;

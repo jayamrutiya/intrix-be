@@ -16,7 +16,7 @@ const app = express();
 app.use(helmet());
 
 // Enable CORS
-app.use(cors({ origin: "*" }));
+app.use(cors({ origin: "https://intrix-datasolution-poc.netlify.app" }));
 
 // Use body parser to read JSON payloads
 app.use(express.json({ limit: "500mb" }));

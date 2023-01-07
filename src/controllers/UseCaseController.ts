@@ -176,4 +176,25 @@ export default class UseCaseController extends BaseController {
       return this.sendErrorResponse(req, res, error);
     }
   }
+
+  async deleteUseCase(req: express.Request, res: express.Response) {
+    try {
+      // validate input
+      this.validateRequest(req);
+
+      const deleteUseCAse = await this._useCaseService.deleteUseCase();
+
+      // Return the response
+      return this.sendJSONResponse(
+        res,
+        "Use Cases deleted.",
+        {
+          size: 1,
+        },
+        deleteUseCAse
+      );
+    } catch (error) {
+      return this.sendErrorResponse(req, res, error);
+    }
+  }
 }

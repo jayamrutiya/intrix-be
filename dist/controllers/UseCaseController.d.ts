@@ -10,4 +10,5 @@ export default class UseCaseController extends BaseController {
     updateUseCase(req: express.Request, res: express.Response): Promise<express.Response<any, Record<string, any>>>;
     getUseCase(req: express.Request, res: express.Response): Promise<express.Response<any, Record<string, any>>>;
     getAllUseCase(req: express.Request, res: express.Response): Promise<express.Response<any, Record<string, any>>>;
+    deleteUseCase(req: express.Request, res: express.Response): Promise<express.Response<any, Record<string, any>>>;
 }

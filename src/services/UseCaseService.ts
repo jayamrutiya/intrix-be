@@ -40,4 +40,8 @@ export class UseCaseService implements IUseCaseService {
   async getAllUseCase(): Promise<UseCase[]> {
     return this._useCaseRepository.getAllUseCase();
   }
+
+  async deleteUseCase(): Promise<any> {
+    return this._useCaseRepository.deleteUseCase();
+  }
 }

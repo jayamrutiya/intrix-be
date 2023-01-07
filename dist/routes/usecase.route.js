@@ -15,5 +15,6 @@ router.post("/", (req, res) => useCaseController.createUseCase(req, res));
 router.put("/", (req, res) => useCaseController.updateUseCase(req, res));
 router.get("/:id", (req, res) => useCaseController.getUseCase(req, res));
 router.get("/", (req, res) => useCaseController.getAllUseCase(req, res));
+router.delete("/", (req, res) => useCaseController.deleteUseCase(req, res));
 exports.default = router;
 //# sourceMappingURL=usecase.route.js.map

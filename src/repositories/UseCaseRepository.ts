@@ -99,4 +99,20 @@ export class UseCaseRepository implements IUseCaseRepository {
       // finally block
     }
   }
+
+  async deleteUseCase(): Promise<any> {
+    try {
+      // Get the client
+      const client = this._databaseService.Client();
+
+      return await client.useCase.deleteMany({});
+    } catch (error) {
+      this._loggerService.getLogger().error(`Error ${error}`);
+      throw new InternalServerError(
+        "An error occurred while interacting with the database."
+      );
+    } finally {
+      // finally block
+    }
+  }
 }
