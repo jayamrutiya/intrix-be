@@ -15,11 +15,11 @@ const errorHandler_1 = require("../middlewares/errorHandler");
 const events_1 = require("./events");
 const subscribers_1 = __importDefault(require("../subscribers"));
 const app = (0, express_1.default)();
-// Use helmet JS
-app.use((0, helmet_1.default)());
 // Enable CORS
 app.use((0, cors_1.default)());
 app.options("*", (0, cors_1.default)());
+// Use helmet JS
+app.use((0, helmet_1.default)());
 // Use body parser to read JSON payloads
 app.use(express_1.default.json({ limit: "500mb" }));
 app.use(body_parser_1.default.json());
@@ -30,13 +30,13 @@ app.use(body_parser_1.default.urlencoded({
 // Use morgan logger
 app.use(logger_1.morganLogger);
 // Add path to swagger docs
-app.use(`${env_1.default.API_ROOT}/docs`, index_1.default.swaggerRouter);
 app.use(function (req, res, next) {
     console.log("in res header");
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
 });
+app.use(`${env_1.default.API_ROOT}/docs`, index_1.default.swaggerRouter);
 // Register routes
 app.use(`${env_1.default.API_ROOT}/test`, index_1.default.testRouter);
 app.use(`${env_1.default.API_ROOT}/use-case`, index_1.default.useCaseRouter);

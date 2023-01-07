@@ -11,13 +11,12 @@ import { EventTypes } from "./events";
 import subscribers from "../subscribers";
 
 const app = express();
-
-// Use helmet JS
-app.use(helmet());
-
 // Enable CORS
 app.use(cors());
 app.options("*", cors());
+
+// Use helmet JS
+app.use(helmet());
 
 // Use body parser to read JSON payloads
 app.use(express.json({ limit: "500mb" }));
@@ -34,7 +33,6 @@ app.use(
 app.use(morganLogger);
 
 // Add path to swagger docs
-app.use(`${ENV.API_ROOT}/docs`, routers.swaggerRouter);
 app.use(function (req, res, next) {
   console.log("in res header");
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -44,6 +42,7 @@ app.use(function (req, res, next) {
   );
   next();
 });
+app.use(`${ENV.API_ROOT}/docs`, routers.swaggerRouter);
 // Register routes
 app.use(`${ENV.API_ROOT}/test`, routers.testRouter);
 app.use(`${ENV.API_ROOT}/use-case`, routers.useCaseRouter);
