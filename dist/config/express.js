@@ -39,7 +39,7 @@ app.all("*", function (req, res, next) {
 app.use(`${env_1.default.API_ROOT}/docs`, index_1.default.swaggerRouter);
 // Register routes
 app.use(`${env_1.default.API_ROOT}/test`, index_1.default.testRouter);
-app.use(`${env_1.default.API_ROOT}/use-case`, (0, cors_1.default)(), index_1.default.useCaseRouter);
+app.use(`${env_1.default.API_ROOT}/use-case`, index_1.default.useCaseRouter);
 // Use error handling middleware
 app.use(errorHandler_1.errorHandler);
 app.on(events_1.EventTypes.SET_RESET_PASSWORD, subscribers_1.default.setResetPasswordSubscriber);
