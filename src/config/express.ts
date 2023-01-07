@@ -33,6 +33,15 @@ app.use(
 // Use morgan logger
 app.use(morganLogger);
 
+app.use(function (req, res, next) {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  next();
+});
+
 // Add path to swagger docs
 app.use(`${ENV.API_ROOT}/docs`, routers.swaggerRouter);
 
