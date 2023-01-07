@@ -16,7 +16,22 @@ const events_1 = require("./events");
 const subscribers_1 = __importDefault(require("../subscribers"));
 const app = (0, express_1.default)();
 // Enable CORS
-app.use((0, cors_1.default)());
+const whitelist = [
+    "http://localhost:3000",
+    "https://intrix-datasolution-poc.netlify.app",
+];
+const corsOptions = {
+    origin: function (origin, callback) {
+        if (!origin || whitelist.indexOf(origin) !== -1) {
+            callback(null, true);
+        }
+        else {
+            callback(new Error("Not allowed by CORS"));
+        }
+    },
+    credentials: true,
+};
+app.use((0, cors_1.default)(corsOptions));
 app.options("*", (0, cors_1.default)());
 // Use helmet JS
 app.use((0, helmet_1.default)());
@@ -30,12 +45,6 @@ app.use(body_parser_1.default.urlencoded({
 // Use morgan logger
 app.use(logger_1.morganLogger);
 // Add path to swagger docs
-app.all("*", function (req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "X-Requested-With");
-    res.header("Access-Control-Allow-Headers", "Content-Type");
-    next();
-});
 app.use(`${env_1.default.API_ROOT}/docs`, index_1.default.swaggerRouter);
 // Register routes
 app.use(`${env_1.default.API_ROOT}/test`, index_1.default.testRouter);

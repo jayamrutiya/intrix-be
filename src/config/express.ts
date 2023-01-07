@@ -12,7 +12,21 @@ import subscribers from "../subscribers";
 
 const app = express();
 // Enable CORS
-app.use(cors());
+const whitelist = [
+  "http://localhost:3000",
+  "https://intrix-datasolution-poc.netlify.app",
+];
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (!origin || whitelist.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
+};
+app.use(cors(corsOptions));
 app.options("*", cors());
 
 // Use helmet JS
@@ -33,12 +47,7 @@ app.use(
 app.use(morganLogger);
 
 // Add path to swagger docs
-app.all("*", function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "X-Requested-With");
-  res.header("Access-Control-Allow-Headers", "Content-Type");
-  next();
-});
+
 app.use(`${ENV.API_ROOT}/docs`, routers.swaggerRouter);
 // Register routes
 app.use(`${ENV.API_ROOT}/test`, routers.testRouter);
