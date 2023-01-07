@@ -16,8 +16,8 @@ const app = express();
 app.use(helmet());
 
 // Enable CORS
-app.use(cors({ origin: "*" }));
-app.options("*", cors({ origin: "*" }));
+app.use(cors());
+app.options("*", cors());
 
 // Use body parser to read JSON payloads
 app.use(express.json({ limit: "500mb" }));
@@ -36,6 +36,7 @@ app.use(morganLogger);
 // Add path to swagger docs
 app.use(`${ENV.API_ROOT}/docs`, routers.swaggerRouter);
 app.use(function (req, res, next) {
+  console.log("in res header");
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
     "Access-Control-Allow-Headers",
