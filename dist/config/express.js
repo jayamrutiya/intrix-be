@@ -30,16 +30,16 @@ app.use(body_parser_1.default.urlencoded({
 // Use morgan logger
 app.use(logger_1.morganLogger);
 // Add path to swagger docs
-app.use(function (req, res, next) {
-    console.log("in res header");
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+app.all("*", function (req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    res.header("Access-Control-Allow-Headers", "Content-Type");
     next();
 });
 app.use(`${env_1.default.API_ROOT}/docs`, index_1.default.swaggerRouter);
 // Register routes
 app.use(`${env_1.default.API_ROOT}/test`, index_1.default.testRouter);
-app.use(`${env_1.default.API_ROOT}/use-case`, index_1.default.useCaseRouter);
+app.use(`${env_1.default.API_ROOT}/use-case`, (0, cors_1.default)(), index_1.default.useCaseRouter);
 // Use error handling middleware
 app.use(errorHandler_1.errorHandler);
 app.on(events_1.EventTypes.SET_RESET_PASSWORD, subscribers_1.default.setResetPasswordSubscriber);

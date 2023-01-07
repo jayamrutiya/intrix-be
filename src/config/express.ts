@@ -33,19 +33,16 @@ app.use(
 app.use(morganLogger);
 
 // Add path to swagger docs
-app.use(function (req, res, next) {
-  console.log("in res header");
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
+app.all("*", function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  res.header("Access-Control-Allow-Headers", "Content-Type");
   next();
 });
 app.use(`${ENV.API_ROOT}/docs`, routers.swaggerRouter);
 // Register routes
 app.use(`${ENV.API_ROOT}/test`, routers.testRouter);
-app.use(`${ENV.API_ROOT}/use-case`, routers.useCaseRouter);
+app.use(`${ENV.API_ROOT}/use-case`, cors(), routers.useCaseRouter);
 
 // Use error handling middleware
 app.use(errorHandler);
