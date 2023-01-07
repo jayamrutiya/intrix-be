@@ -29,13 +29,13 @@ app.use(body_parser_1.default.urlencoded({
 }));
 // Use morgan logger
 app.use(logger_1.morganLogger);
+// Add path to swagger docs
+app.use(`${env_1.default.API_ROOT}/docs`, index_1.default.swaggerRouter);
 app.use(function (req, res, next) {
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
 });
-// Add path to swagger docs
-app.use(`${env_1.default.API_ROOT}/docs`, index_1.default.swaggerRouter);
 // Register routes
 app.use(`${env_1.default.API_ROOT}/test`, index_1.default.testRouter);
 app.use(`${env_1.default.API_ROOT}/use-case`, index_1.default.useCaseRouter);

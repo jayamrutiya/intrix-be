@@ -33,6 +33,8 @@ app.use(
 // Use morgan logger
 app.use(morganLogger);
 
+// Add path to swagger docs
+app.use(`${ENV.API_ROOT}/docs`, routers.swaggerRouter);
 app.use(function (req, res, next) {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
@@ -41,10 +43,6 @@ app.use(function (req, res, next) {
   );
   next();
 });
-
-// Add path to swagger docs
-app.use(`${ENV.API_ROOT}/docs`, routers.swaggerRouter);
-
 // Register routes
 app.use(`${ENV.API_ROOT}/test`, routers.testRouter);
 app.use(`${ENV.API_ROOT}/use-case`, routers.useCaseRouter);
