@@ -18,7 +18,7 @@ const app = (0, express_1.default)();
 // Enable CORS
 const whitelist = [
     "http://localhost:3000",
-    "http://www.intrix-datasolution-poc.netlify.app",
+    "http://intrix-datasolution-poc.netlify.app",
 ];
 const corsOptions = {
     origin: function (origin, callback) {
