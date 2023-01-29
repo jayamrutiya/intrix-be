@@ -6,7 +6,7 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -52,4 +52,23 @@ model UseCase {
   approver                   String?
   status                     String?
   priority                   String?
+}
+
+enum ConnectionType {
+  MySql
+  Postgresql
+}
+
+model Connection {
+  id          Int            @id @default(autoincrement())
+  name        String
+  host        String
+  user        String
+  password    String
+  database    String
+  port        Int
+  type        ConnectionType
+  isConnected Boolean        @default(false)
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
 }

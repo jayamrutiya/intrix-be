@@ -76,6 +76,7 @@
   "dependencies": {
     "@prisma/client": "^4.8.0",
     "@types/jest": "^27.4.1",
+    "@types/mysql": "^2.15.21",
     "@types/swagger-jsdoc": "^6.0.1",
     "app-root-path": "^3.0.0",
     "body-parser": "^1.19.1",
@@ -89,6 +90,7 @@
     "inversify-binding-decorators": "^4.0.0",
     "json-bigint": "^1.0.0",
     "morgan": "^1.10.0",
+    "mysql": "^2.18.1",
     "reflect-metadata": "^0.1.13",
     "swagger-jsdoc": "^6.1.0",
     "swagger-ui-express": "^4.3.0",
