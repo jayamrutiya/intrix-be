@@ -2,7 +2,11 @@ import { IConnectionService } from "../interfaces/IConnectionService";
 import { ILoggerService } from "../interfaces/ILoggerService";
 import BaseController from "./BaseController";
 import * as express from "express";
-import { TestConnection } from "../types/Connection";
+import {
+  CreateConnection,
+  TestConnection,
+  UpdateConnection,
+} from "../types/Connection";
 import { ConnectionType } from "@prisma/client";
 
 export default class ConnectionController extends BaseController {
@@ -45,6 +49,119 @@ export default class ConnectionController extends BaseController {
           size: 1,
         },
         testConnection
+      );
+    } catch (error) {
+      return this.sendErrorResponse(req, res, error);
+    }
+  }
+
+  async createConnection(req: express.Request, res: express.Response) {
+    try {
+      // validate input
+      this.validateRequest(req);
+
+      const input: CreateConnection = {
+        name: req.body.name,
+        database: req.body.database,
+        host: req.body.host,
+        port: Number(req.body.port),
+        password: req.body.password,
+        user: req.body.user,
+        type: ConnectionType[req.body.type],
+        isConnected: false,
+      };
+
+      const createConnection = await this._connectionService.createConnection(
+        input
+      );
+
+      // Return the response
+      return this.sendJSONResponse(
+        res,
+        "Create the connection.",
+        {
+          size: 1,
+        },
+        createConnection
+      );
+    } catch (error) {
+      return this.sendErrorResponse(req, res, error);
+    }
+  }
+
+  async updateConnection(req: express.Request, res: express.Response) {
+    try {
+      // validate input
+      this.validateRequest(req);
+
+      const input: UpdateConnection = {
+        id: req.body.id,
+        name: req.body.name,
+        database: req.body.database,
+        host: req.body.host,
+        port: Number(req.body.port),
+        password: req.body.password,
+        user: req.body.user,
+        type: ConnectionType[req.body.type],
+        isConnected: false,
+      };
+
+      const updateConnection = await this._connectionService.updateConnection(
+        input
+      );
+
+      // Return the response
+      return this.sendJSONResponse(
+        res,
+        "Update the connection.",
+        {
+          size: 1,
+        },
+        updateConnection
+      );
+    } catch (error) {
+      return this.sendErrorResponse(req, res, error);
+    }
+  }
+
+  async getConnection(req: express.Request, res: express.Response) {
+    try {
+      // validate input
+      this.validateRequest(req);
+
+      const id = Number(req.params.id);
+
+      const getConnection = await this._connectionService.getConnection(id);
+
+      // Return the response
+      return this.sendJSONResponse(
+        res,
+        "Get the connection.",
+        {
+          size: 1,
+        },
+        getConnection
+      );
+    } catch (error) {
+      return this.sendErrorResponse(req, res, error);
+    }
+  }
+
+  async getConnections(req: express.Request, res: express.Response) {
+    try {
+      // validate input
+      this.validateRequest(req);
+
+      const getConnections = await this._connectionService.getConnections();
+
+      // Return the response
+      return this.sendJSONResponse(
+        res,
+        "Get the connections.",
+        {
+          size: 1,
+        },
+        getConnections
       );
     } catch (error) {
       return this.sendErrorResponse(req, res, error);

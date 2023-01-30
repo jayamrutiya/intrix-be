@@ -5,6 +5,9 @@ import { iocContainer as Container } from "../config/container";
 import { IConnectionService } from "../interfaces/IConnectionService";
 import ConnectionController from "../controllers/ConnectionController";
 import testConnectionValidator from "../validators/test-connection.validator";
+import createConnectionValidator from "../validators/create-connection.validator";
+import updateConnectionValidator from "../validators/update-connection.validator copy";
+import getConnectionValidator from "../validators/get-connection.validator";
 
 const router = express.Router();
 
@@ -17,8 +20,22 @@ const connectionController = new ConnectionController(
   connectionService
 );
 
+router.get("/:id", getConnectionValidator, (req, res) =>
+  connectionController.getConnection(req, res)
+);
+
+router.get("/", (req, res) => connectionController.getConnections(req, res));
+
 router.post("/test", testConnectionValidator, (req, res) =>
   connectionController.testConnection(req, res)
+);
+
+router.post("/", createConnectionValidator, (req, res) =>
+  connectionController.createConnection(req, res)
+);
+
+router.put("/", updateConnectionValidator, (req, res) =>
+  connectionController.updateConnection(req, res)
 );
 
 export default router;
