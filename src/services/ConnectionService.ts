@@ -86,7 +86,7 @@ export class ConnectionService implements IConnectionService {
           }
         });
       }
-      reject(false);
+      // reject(false);
     });
 
     return data

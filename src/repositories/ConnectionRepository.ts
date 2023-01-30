@@ -50,11 +50,13 @@ export class ConnectionRepository implements IConnectionRepository {
       // Get the client
       const client = this._databaseService.Client();
 
+      const { id, ...restData } = input;
+
       const updateConnection = await client.connection.update({
         where: {
           id: input.id,
         },
-        data: input,
+        data: restData,
       });
 
       return updateConnection;
@@ -95,7 +97,11 @@ export class ConnectionRepository implements IConnectionRepository {
       // Get the client
       const client = this._databaseService.Client();
 
-      const getConnections = await client.connection.findMany({});
+      const getConnections = await client.connection.findMany({
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
 
       return getConnections;
     } catch (error) {

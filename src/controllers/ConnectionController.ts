@@ -95,7 +95,7 @@ export default class ConnectionController extends BaseController {
       this.validateRequest(req);
 
       const input: UpdateConnection = {
-        id: req.body.id,
+        id: Number(req.body.id),
         name: req.body.name,
         database: req.body.database,
         host: req.body.host,
