@@ -12,4 +12,6 @@ export interface IConnectionService {
   updateConnection(input: UpdateConnection): Promise<Connection>;
   getConnection(id: number): Promise<Connection | null>;
   getConnections(): Promise<Connection[]>;
+  getConnectionTables(id: number): Promise<any>;
+  getTableColumns(connectionId: number, tableName: string): Promise<any>;
 }

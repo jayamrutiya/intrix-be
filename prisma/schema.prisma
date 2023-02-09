@@ -72,3 +72,18 @@ model Connection {
   createdAt   DateTime       @default(now())
   updatedAt   DateTime       @updatedAt
 }
+
+enum ProfilingType {
+  COLUMN
+  TABLE
+}
+
+model ProfilingRules {
+  id            Int            @id @default(autoincrement())
+  rule          String         @db.Text
+  profilingType ProfilingType
+  databaseType  ConnectionType
+  description   String         @db.Text
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}

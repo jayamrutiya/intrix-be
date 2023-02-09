@@ -20,6 +20,14 @@ const connectionController = new ConnectionController(
   connectionService
 );
 
+router.get("/table", (req, res) =>
+  connectionController.getConnectionTables(req, res)
+);
+
+router.get("/column", (req, res) =>
+  connectionController.getTableColumns(req, res)
+);
+
 router.get("/:id", getConnectionValidator, (req, res) =>
   connectionController.getConnection(req, res)
 );

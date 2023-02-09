@@ -12,6 +12,8 @@ import {
 import * as mysql from "mysql";
 import { ConnectionType } from "@prisma/client";
 import { BadRequest } from "../errors/BadRequest";
+import { NotFound } from "../errors/NotFound";
+import { InternalServerError } from "../errors/InternalServerError";
 
 @injectable()
 export class ConnectionService implements IConnectionService {
@@ -95,6 +97,96 @@ export class ConnectionService implements IConnectionService {
       })
       .catch((error) => {
         return { isConnected: false };
+      });
+  }
+
+  async getConnectionTables(id: number): Promise<any> {
+    const getConnection = await this._connectionRepository.getConnection(id);
+    if (!getConnection) {
+      throw new NotFound("Connection not found");
+    }
+
+    const data = new Promise((resolve, reject) => {
+      if (getConnection.type === ConnectionType.MySql) {
+        const connection = mysql.createConnection({
+          host: getConnection.host,
+          user: getConnection.user,
+          password: getConnection.password,
+          database: getConnection.database,
+          port: getConnection.port,
+        });
+        connection.connect((error) => {
+          if (error) {
+            reject(error);
+          } else {
+            connection.query(
+              "SELECT table_name FROM information_schema.tables WHERE table_schema = ?",
+              [getConnection.database],
+              function (error, result) {
+                if (error) {
+                  reject(error);
+                }
+                resolve(result);
+              }
+            );
+          }
+        });
+      }
+      // reject(false);
+    });
+
+    return data
+      .then((result: any) => {
+        return result.map((d) => d.TABLE_NAME);
+      })
+      .catch((error) => {
+        throw new InternalServerError("Database not connected." + error);
+      });
+  }
+
+  async getTableColumns(connectionId: number, tableName: string): Promise<any> {
+    const getConnection = await this._connectionRepository.getConnection(
+      connectionId
+    );
+    if (!getConnection) {
+      throw new NotFound("Connection not found");
+    }
+
+    const data = new Promise((resolve, reject) => {
+      if (getConnection.type === ConnectionType.MySql) {
+        const connection = mysql.createConnection({
+          host: getConnection.host,
+          user: getConnection.user,
+          password: getConnection.password,
+          database: getConnection.database,
+          port: getConnection.port,
+        });
+        connection.connect((error) => {
+          if (error) {
+            reject(error);
+          } else {
+            connection.query(
+              `SHOW COLUMNS FROM ${tableName}`,
+              [],
+              function (error, result) {
+                if (error) {
+                  reject(error);
+                }
+                resolve(result);
+              }
+            );
+          }
+        });
+      }
+      // reject(false);
+    });
+
+    return data
+      .then((result: any) => {
+        return result;
+      })
+      .catch((error) => {
+        throw new InternalServerError("Database not connected." + error);
       });
   }
 }

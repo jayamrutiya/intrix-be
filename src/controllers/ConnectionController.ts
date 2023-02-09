@@ -167,4 +167,55 @@ export default class ConnectionController extends BaseController {
       return this.sendErrorResponse(req, res, error);
     }
   }
+
+  async getConnectionTables(req: express.Request, res: express.Response) {
+    try {
+      // validate input
+      this.validateRequest(req);
+
+      const id = Number(req.query.connectionId);
+
+      const getConnectionTables =
+        await this._connectionService.getConnectionTables(id);
+
+      // Return the response
+      return this.sendJSONResponse(
+        res,
+        "Get the connection tables.",
+        {
+          size: 1,
+        },
+        getConnectionTables
+      );
+    } catch (error) {
+      return this.sendErrorResponse(req, res, error);
+    }
+  }
+
+  async getTableColumns(req: express.Request, res: express.Response) {
+    try {
+      // validate input
+      this.validateRequest(req);
+
+      const id = Number(req.query.connectionId);
+      const tableName = req.query.tableName?.toString();
+
+      const getTableColumns = await this._connectionService.getTableColumns(
+        id,
+        tableName!
+      );
+
+      // Return the response
+      return this.sendJSONResponse(
+        res,
+        "Get the table columns.",
+        {
+          size: 1,
+        },
+        getTableColumns
+      );
+    } catch (error) {
+      return this.sendErrorResponse(req, res, error);
+    }
+  }
 }
