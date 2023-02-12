@@ -1,3 +1,4 @@
+import { ConnectionType, ProfilingType } from "@prisma/client";
 import { inject, injectable } from "inversify";
 import { TYPES } from "../config/types";
 import { InternalServerError } from "../errors/InternalServerError";
@@ -104,6 +105,32 @@ export class ConnectionRepository implements IConnectionRepository {
       });
 
       return getConnections;
+    } catch (error) {
+      this._loggerService.getLogger().error(`Error ${error}`);
+      throw new InternalServerError(
+        "An error occurred while interacting with the database."
+      );
+    } finally {
+      // finally block
+    }
+  }
+
+  async createProfilingRule(): Promise<any> {
+    try {
+      // Get the client
+      const client = this._databaseService.Client();
+
+      const createProfilingRule = await client.profilingRules.create({
+        data: {
+          name: "ROW_COUNT",
+          rule: "SELECT COUNT(COLUMN_NAME) As ROW_COUNT FROM TABLE_NAME",
+          profilingType: ProfilingType.COLUMN,
+          databaseType: ConnectionType.MySql,
+          description: "Total count of row",
+        },
+      });
+
+      return createProfilingRule;
     } catch (error) {
       this._loggerService.getLogger().error(`Error ${error}`);
       throw new InternalServerError(

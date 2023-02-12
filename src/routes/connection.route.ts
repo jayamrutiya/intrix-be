@@ -46,4 +46,8 @@ router.put("/", updateConnectionValidator, (req, res) =>
   connectionController.updateConnection(req, res)
 );
 
+router.post("/createProfilingRule", (req, res) =>
+  connectionController.createProfilingRule(req, res)
+);
+
 export default router;

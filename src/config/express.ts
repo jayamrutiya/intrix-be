@@ -55,6 +55,7 @@ app.use(`${ENV.API_ROOT}/docs`, routers.swaggerRouter);
 app.use(`${ENV.API_ROOT}/test`, routers.testRouter);
 app.use(`${ENV.API_ROOT}/use-case`, routers.useCaseRouter);
 app.use(`${ENV.API_ROOT}/connection`, routers.connectionRouter);
+app.use(`${ENV.API_ROOT}/profilingrule`, routers.profilingRuleRouter);
 
 // Use error handling middleware
 app.use(errorHandler);

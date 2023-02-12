@@ -10,23 +10,29 @@ import {
   UpdateConnection,
 } from "../types/Connection";
 import * as mysql from "mysql";
-import { ConnectionType } from "@prisma/client";
+import { ConnectionType, ProfilingType } from "@prisma/client";
 import { BadRequest } from "../errors/BadRequest";
 import { NotFound } from "../errors/NotFound";
 import { InternalServerError } from "../errors/InternalServerError";
+import { IProfilingRuleRepository } from "../interfaces/IProfilingRuleRepository";
+import { RunProfilingRuleInput } from "../types/ProfilingRule";
 
 @injectable()
 export class ConnectionService implements IConnectionService {
   private _loggerService: ILoggerService;
   private _connectionRepository: IConnectionRepository;
+  private _profilingRuleRepository: IProfilingRuleRepository;
 
   constructor(
     @inject(TYPES.LoggerService) loggerService: ILoggerService,
     @inject(TYPES.ConnectionRepository)
-    connectionRepository: IConnectionRepository
+    connectionRepository: IConnectionRepository,
+    @inject(TYPES.ProfilingRuleRepository)
+    profilingRuleRepository: IProfilingRuleRepository
   ) {
     this._connectionRepository = connectionRepository;
     this._loggerService = loggerService;
+    this._profilingRuleRepository = profilingRuleRepository;
     this._loggerService.getLogger().info(`Creating: ${this.constructor.name}`);
   }
   async createConnection(input: CreateConnection): Promise<Connection> {
@@ -88,7 +94,6 @@ export class ConnectionService implements IConnectionService {
           }
         });
       }
-      // reject(false);
     });
 
     return data
@@ -188,5 +193,9 @@ export class ConnectionService implements IConnectionService {
       .catch((error) => {
         throw new InternalServerError("Database not connected." + error);
       });
+  }
+
+  async createProfilingRule(): Promise<any> {
+    return this._connectionRepository.createProfilingRule();
   }
 }

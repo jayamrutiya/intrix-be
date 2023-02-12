@@ -14,4 +14,5 @@ export interface IConnectionService {
   getConnections(): Promise<Connection[]>;
   getConnectionTables(id: number): Promise<any>;
   getTableColumns(connectionId: number, tableName: string): Promise<any>;
+  createProfilingRule(): Promise<any>;
 }

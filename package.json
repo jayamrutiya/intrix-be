@@ -94,6 +94,7 @@
     "reflect-metadata": "^0.1.13",
     "swagger-jsdoc": "^6.1.0",
     "swagger-ui-express": "^4.3.0",
+    "util": "^0.12.5",
     "uuid": "^9.0.0",
     "winston": "^3.3.3"
   }

@@ -80,6 +80,7 @@ enum ProfilingType {
 
 model ProfilingRules {
   id            Int            @id @default(autoincrement())
+  name          String
   rule          String         @db.Text
   profilingType ProfilingType
   databaseType  ConnectionType

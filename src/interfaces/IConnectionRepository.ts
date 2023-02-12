@@ -9,4 +9,5 @@ export interface IConnectionRepository {
   updateConnection(input: UpdateConnection): Promise<Connection>;
   getConnection(id: number): Promise<Connection | null>;
   getConnections(): Promise<Connection[]>;
+  createProfilingRule(): Promise<any>;
 }

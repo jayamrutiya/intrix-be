@@ -218,4 +218,23 @@ export default class ConnectionController extends BaseController {
       return this.sendErrorResponse(req, res, error);
     }
   }
+
+  async createProfilingRule(req: express.Request, res: express.Response) {
+    try {
+      const createProfilingRule =
+        await this._connectionService.createProfilingRule();
+
+      // Return the response
+      return this.sendJSONResponse(
+        res,
+        "Get the table columns.",
+        {
+          size: 1,
+        },
+        createProfilingRule
+      );
+    } catch (error) {
+      return this.sendErrorResponse(req, res, error);
+    }
+  }
 }
