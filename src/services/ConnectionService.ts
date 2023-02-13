@@ -16,6 +16,7 @@ import { NotFound } from "../errors/NotFound";
 import { InternalServerError } from "../errors/InternalServerError";
 import { IProfilingRuleRepository } from "../interfaces/IProfilingRuleRepository";
 import { RunProfilingRuleInput } from "../types/ProfilingRule";
+import * as util from "util";
 
 @injectable()
 export class ConnectionService implements IConnectionService {
@@ -111,42 +112,34 @@ export class ConnectionService implements IConnectionService {
       throw new NotFound("Connection not found");
     }
 
-    const data = new Promise((resolve, reject) => {
-      if (getConnection.type === ConnectionType.MySql) {
-        const connection = mysql.createConnection({
-          host: getConnection.host,
-          user: getConnection.user,
-          password: getConnection.password,
-          database: getConnection.database,
-          port: getConnection.port,
-        });
-        connection.connect((error) => {
-          if (error) {
-            reject(error);
-          } else {
-            connection.query(
-              "SELECT table_name FROM information_schema.tables WHERE table_schema = ?",
-              [getConnection.database],
-              function (error, result) {
-                if (error) {
-                  reject(error);
-                }
-                resolve(result);
-              }
-            );
-          }
+    const response: any = [];
+    if (getConnection.type === ConnectionType.MySql) {
+      //   const data = new Promise((resolve, reject) => {
+      const connection = mysql.createConnection({
+        host: getConnection.host,
+        user: getConnection.user,
+        password: getConnection.password,
+        database: getConnection.database,
+        port: getConnection.port,
+      });
+      const conn = util.promisify(connection.query).bind(connection);
+
+      const tables = await conn(
+        `SELECT table_name FROM information_schema.tables WHERE table_schema = ?`,
+        [getConnection.database]
+      );
+
+      for (let i = 0; i < tables.length; i++) {
+        const table = tables[i];
+        const columns = await conn(`SHOW COLUMNS FROM ${table.TABLE_NAME}`);
+        response.push({
+          tableName: table.TABLE_NAME,
+          columns,
         });
       }
-      // reject(false);
-    });
+    }
 
-    return data
-      .then((result: any) => {
-        return result.map((d) => d.TABLE_NAME);
-      })
-      .catch((error) => {
-        throw new InternalServerError("Database not connected." + error);
-      });
+    return response;
   }
 
   async getTableColumns(connectionId: number, tableName: string): Promise<any> {
