@@ -69,6 +69,7 @@ export default class ConnectionController extends BaseController {
         user: req.body.user,
         type: ConnectionType[req.body.type],
         isConnected: false,
+        description: req.body.description,
       };
 
       const createConnection = await this._connectionService.createConnection(
@@ -104,6 +105,7 @@ export default class ConnectionController extends BaseController {
         user: req.body.user,
         type: ConnectionType[req.body.type],
         isConnected: false,
+        description: req.body.description,
       };
 
       const updateConnection = await this._connectionService.updateConnection(

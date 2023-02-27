@@ -24,6 +24,7 @@ export declare type CreateConnection = {
   port: number;
   type: ConnectionType;
   isConnected: boolean;
+  description: string | null;
   //   createdAt: Date;
   //   updatedAt: Date;
 };
@@ -37,6 +38,7 @@ export declare type Connection = {
   database: string;
   port: number;
   type: ConnectionType;
+  description: string | null;
   isConnected: boolean;
   createdAt: Date;
   updatedAt: Date;
@@ -52,6 +54,7 @@ export declare type UpdateConnection = {
   port: number;
   type: ConnectionType;
   isConnected: boolean;
+  description: string | null;
   //   createdAt: Date;
   //   updatedAt: Date;
 };

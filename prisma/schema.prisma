@@ -68,6 +68,7 @@ model Connection {
   database    String
   port        Int
   type        ConnectionType
+  description String?        @db.Text
   isConnected Boolean        @default(false)
   createdAt   DateTime       @default(now())
   updatedAt   DateTime       @updatedAt
