@@ -17,6 +17,7 @@ import { InternalServerError } from "../errors/InternalServerError";
 import { IProfilingRuleRepository } from "../interfaces/IProfilingRuleRepository";
 import { RunProfilingRuleInput } from "../types/ProfilingRule";
 import * as util from "util";
+import { Client } from "pg";
 
 @injectable()
 export class ConnectionService implements IConnectionService {
@@ -78,7 +79,7 @@ export class ConnectionService implements IConnectionService {
   async testConnection(
     input: TestConnection
   ): Promise<{ isConnected: boolean }> {
-    const data = new Promise((resolve, reject) => {
+    const data = new Promise(async (resolve, reject) => {
       if (input.type === ConnectionType.MySql) {
         const connection = mysql.createConnection({
           host: input.host,
@@ -94,6 +95,23 @@ export class ConnectionService implements IConnectionService {
             resolve(connection);
           }
         });
+      }
+      if (input.type === ConnectionType.Postgresql) {
+        console.log("in Postgres");
+        try {
+          const client = new Client({
+            user: input.user,
+            host: input.host,
+            database: input.database,
+            port: input.port,
+            password: input.password,
+          });
+          const connection = await client.connect();
+          resolve(connection);
+        } catch (error) {
+          console.log("in Postgres error", error);
+          reject(error);
+        }
       }
     });
 
@@ -112,8 +130,9 @@ export class ConnectionService implements IConnectionService {
       throw new NotFound("Connection not found");
     }
 
-    const response: any = [];
+    const response = { databaseName: "", tables: <any>[] };
     if (getConnection.type === ConnectionType.MySql) {
+      response.databaseName = getConnection.database;
       //   const data = new Promise((resolve, reject) => {
       const connection = mysql.createConnection({
         host: getConnection.host,
@@ -132,9 +151,45 @@ export class ConnectionService implements IConnectionService {
       for (let i = 0; i < tables.length; i++) {
         const table = tables[i];
         const columns = await conn(`SHOW COLUMNS FROM ${table.TABLE_NAME}`);
-        response.push({
+        response.tables.push({
           tableName: table.TABLE_NAME,
           columns,
+        });
+      }
+    }
+
+    if (getConnection.type === ConnectionType.Postgresql) {
+      response.databaseName = getConnection.database;
+      const client = new Client({
+        user: getConnection.user,
+        host: getConnection.host,
+        database: getConnection.database,
+        port: getConnection.port,
+        password: getConnection.password,
+      });
+      const connection = await client.connect();
+      const getTables = await client.query(
+        `SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'`
+      );
+      // console.log("getTables", getTables.rows);
+
+      for (let i = 0; i < getTables.rows.length; i++) {
+        const table = getTables.rows[i];
+        const column = await client.query(
+          "SELECT * FROM information_schema.columns WHERE table_name = $1",
+          [table.table_name]
+        );
+        response.tables.push({
+          tableName: table.table_name,
+          columns: column.rows.map((d) => {
+            return {
+              Field: d.column_name,
+              Type: d.data_type,
+              Null: d.is_nullable,
+              Default: d.column_default,
+              Key: "",
+            };
+          }),
         });
       }
     }
