@@ -60,18 +60,19 @@ enum ConnectionType {
 }
 
 model Connection {
-  id          Int            @id @default(autoincrement())
-  name        String
-  host        String
-  user        String
-  password    String
-  database    String
-  port        Int
-  type        ConnectionType
-  description String?        @db.Text
-  isConnected Boolean        @default(false)
-  createdAt   DateTime       @default(now())
-  updatedAt   DateTime       @updatedAt
+  id                Int                 @id @default(autoincrement())
+  name              String
+  host              String
+  user              String
+  password          String
+  database          String
+  port              Int
+  type              ConnectionType
+  description       String?             @db.Text
+  isConnected       Boolean             @default(false)
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  ProfilingSchedule ProfilingSchedule[]
 }
 
 enum ProfilingType {
@@ -88,4 +89,40 @@ model ProfilingRules {
   description   String         @db.Text
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
+}
+
+enum Frequency {
+  Daily
+  Weekly
+  Monthly
+  Yearly
+}
+
+model ProfilingSchedule {
+  id                       Int                        @id @default(autoincrement())
+  name                     String
+  processName              String
+  startDate                DateTime
+  endDate                  DateTime
+  frequency                Frequency
+  selectedData             Json
+  connectionId             Int
+  connection               Connection                 @relation(fields: [connectionId], references: [id])
+  createdAt                DateTime                   @default(now())
+  updatedAt                DateTime                   @updatedAt
+  ProfilingScheduleToBeRun ProfilingScheduleToBeRun[]
+}
+
+model ProfilingScheduleToBeRun {
+  id                  Int               @id @default(autoincrement())
+  profilingScheduleId Int
+  profilingSchedule   ProfilingSchedule @relation(fields: [profilingScheduleId], references: [id])
+  result              Json?
+  isFaild             Boolean           @default(false)
+  isCompleted         Boolean           @default(false)
+  runAt               DateTime
+  startAt             DateTime?
+  endsAt              DateTime?
+  createdAt           DateTime          @default(now())
+  updatedAt           DateTime          @updatedAt
 }

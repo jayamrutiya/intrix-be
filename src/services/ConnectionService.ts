@@ -5,6 +5,7 @@ import { IConnectionService } from "../interfaces/IConnectionService";
 import { ILoggerService } from "../interfaces/ILoggerService";
 import {
   Connection,
+  ConnectionWithPagination,
   CreateConnection,
   TestConnection,
   UpdateConnection,
@@ -72,8 +73,11 @@ export class ConnectionService implements IConnectionService {
   getConnection(id: number): Promise<Connection | null> {
     return this._connectionRepository.getConnection(id);
   }
-  getConnections(): Promise<Connection[]> {
-    return this._connectionRepository.getConnections();
+  getConnections(
+    page: number,
+    size: number
+  ): Promise<ConnectionWithPagination> {
+    return this._connectionRepository.getConnections(page, size);
   }
 
   async testConnection(

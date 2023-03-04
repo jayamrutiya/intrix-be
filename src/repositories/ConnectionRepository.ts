@@ -7,6 +7,7 @@ import { IDatabaseService } from "../interfaces/IDatabaseService";
 import { ILoggerService } from "../interfaces/ILoggerService";
 import {
   Connection,
+  ConnectionWithPagination,
   CreateConnection,
   UpdateConnection,
 } from "../types/Connection";
@@ -93,18 +94,41 @@ export class ConnectionRepository implements IConnectionRepository {
     }
   }
 
-  async getConnections(): Promise<Connection[]> {
+  async getConnections(
+    page: number,
+    size: number
+  ): Promise<ConnectionWithPagination> {
     try {
       // Get the client
       const client = this._databaseService.Client();
 
-      const getConnections = await client.connection.findMany({
-        orderBy: {
-          createdAt: "desc",
-        },
-      });
+      const totalCount = await client.connection.count({});
+      let getConnections: Connection[];
+      if (page === 0 && size === 0) {
+        getConnections = await client.connection.findMany({
+          orderBy: {
+            createdAt: "desc",
+          },
+        });
+      } else {
+        getConnections = await client.connection.findMany({
+          orderBy: {
+            createdAt: "desc",
+          },
+          skip: size * (page - 1),
+          take: size,
+        });
+      }
 
-      return getConnections;
+      const response = {
+        totalCount,
+        size,
+        page,
+        length: getConnections.length,
+        connections: getConnections,
+      };
+
+      return response;
     } catch (error) {
       this._loggerService.getLogger().error(`Error ${error}`);
       throw new InternalServerError(

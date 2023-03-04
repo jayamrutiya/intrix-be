@@ -154,16 +154,25 @@ export default class ConnectionController extends BaseController {
       // validate input
       this.validateRequest(req);
 
-      const getConnections = await this._connectionService.getConnections();
+      const page = Number(req.query.page);
+      const size = Number(req.query.size);
+
+      const getConnections = await this._connectionService.getConnections(
+        page,
+        size
+      );
 
       // Return the response
       return this.sendJSONResponse(
         res,
         "Get the connections.",
         {
-          size: 1,
+          page: getConnections.page,
+          size: getConnections.size,
+          length: getConnections.length,
+          total: getConnections.totalCount,
         },
-        getConnections
+        getConnections.connections
       );
     } catch (error) {
       return this.sendErrorResponse(req, res, error);

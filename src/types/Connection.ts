@@ -44,6 +44,14 @@ export declare type Connection = {
   updatedAt: Date;
 };
 
+export declare type ConnectionWithPagination = {
+  totalCount: number;
+  size: number;
+  page: number;
+  length: number;
+  connections: Connection[];
+};
+
 export declare type UpdateConnection = {
   id: number;
   name: string;
