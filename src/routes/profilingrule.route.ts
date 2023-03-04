@@ -16,8 +16,20 @@ const profilingRuleController = new ProfilingRuleController(
   profilingRuleService
 );
 
+router.get("/schedules/:id", (req, res) =>
+  profilingRuleController.getProfilingSchedule(req, res)
+);
+
 router.post("/run", (req, res) =>
   profilingRuleController.runProfilingRules(req, res)
+);
+
+router.post("/schedule", (req, res) =>
+  profilingRuleController.createProfilingRuleSchedule(req, res)
+);
+
+router.get("/schedules", (req, res) =>
+  profilingRuleController.getProfilingSchedules(req, res)
 );
 
 export default router;

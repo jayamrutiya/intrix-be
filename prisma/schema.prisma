@@ -119,6 +119,7 @@ model ProfilingScheduleToBeRun {
   profilingSchedule   ProfilingSchedule @relation(fields: [profilingScheduleId], references: [id])
   result              Json?
   isFaild             Boolean           @default(false)
+  error               String?           @db.Text
   isCompleted         Boolean           @default(false)
   runAt               DateTime
   startAt             DateTime?

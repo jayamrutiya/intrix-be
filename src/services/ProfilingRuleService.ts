@@ -6,7 +6,12 @@ import { IConnectionRepository } from "../interfaces/IConnectionRepository";
 import { ILoggerService } from "../interfaces/ILoggerService";
 import { IProfilingRuleRepository } from "../interfaces/IProfilingRuleRepository";
 import { IProfilingRuleService } from "../interfaces/IProfilingRuleService";
-import { RunProfilingRuleInput } from "../types/ProfilingRule";
+import {
+  CreateProfilingScheduleInput,
+  ProfilingSchedule,
+  ProfilingScheduleWithPagination,
+  RunProfilingRuleInput,
+} from "../types/ProfilingRule";
 import * as mysql from "mysql";
 import * as util from "util";
 
@@ -151,5 +156,22 @@ export class ProfilingRuleService implements IProfilingRuleService {
     return str.replace(re, function (matched) {
       return mapObj[matched];
     });
+  }
+
+  async createProfilingRuleSchedule(
+    input: CreateProfilingScheduleInput
+  ): Promise<ProfilingSchedule> {
+    return this._profilingRuleRepository.createProfilingRuleSchedule(input);
+  }
+
+  async getProfilingSchedules(
+    page: number,
+    size: number
+  ): Promise<ProfilingScheduleWithPagination> {
+    return this._profilingRuleRepository.getProfilingSchedules(page, size);
+  }
+
+  async getProfilingSchedule(id: number): Promise<ProfilingSchedule | null> {
+    return this._profilingRuleRepository.getProfilingSchedule(id);
   }
 }
